@@ -9,7 +9,7 @@ html {
     font-family: 'Homestead', Arial, Helvetica, sans-serif;
 }
 body {
-  background: #415353;
+  background: #8cbddd;
   padding: 0;
   margin: 0;
   font-size: 14px;
@@ -21,7 +21,7 @@ body {
   position: relative;
   top: 30px;
   margin-bottom: 30px;
-  background: #415353;
+  background: #5dbbdd;
   color: white;
 }
 
@@ -463,13 +463,13 @@ ul.sharebuttons li {
 
 #share-via-facebook {
 	background: #3B5998;
-	color: white;	
+	color: white;
 	font-weight: bold;
 }
 
 #share-via-whatsapp {
 	background: #43d854;
-	color: white;	
+	color: white;
 	font-weight: bold;
 }
 
@@ -479,7 +479,7 @@ ul.sharebuttons li {
 
 #share-via-twitter {
 	background: #4099FF;
-	color: white;	
+	color: white;
 	font-weight: bold;
 }
 
@@ -661,32 +661,32 @@ body:not(.neighborhoods-removed) .neighborhoods-removed-disclaimer {
 
 /* tablets and larger */
 @media only screen and (min-device-width : 736px) {
-	
+
 	#share-via-whatsapp {
 		display: none;
 	}
-	
+
 	br.rwd-break {
 	display:none;
 	}
-	
+
 	.save-to-homescreen {
 		display:none;
 	}
-	
+
 	#mobilelogo {
 		display: none;
 	}
-	
+
 }
 
-/*iphone 6 
-@media only screen 
+/*iphone 6
+@media only screen
     and (min-device-width : 375px) // or 213.4375em
     and (max-device-width : 667px) // or 41.6875em
     and (width : 375px) // or 23.4375em
     and (height : 559px) // or 34.9375em
-    and (orientation : portrait) 
+    and (orientation : portrait)
     and (color : 8)
     and (device-aspect-ratio : 375/667)
     and (aspect-ratio : 375/559)
@@ -703,14 +703,14 @@ body:not(.neighborhoods-removed) .neighborhoods-removed-disclaimer {
 
 /* mobile */
 @media only screen and (max-device-width : 768px) {
-	
+
 	footer, #sharing, header.game, .menu, #more-cities-wrapper, #share-via-email {display: none;}
-	
+
 	.canvas {
 		top:0;
 		margin-bottom:0;
 	}
-	
+
 	#svg-container {
 	  z-index: 50;
 	  position: absolute;
@@ -719,46 +719,46 @@ body:not(.neighborhoods-removed) .neighborhoods-removed-disclaimer {
 	  left: 5%;
 	  right: 0;
 	}
-	
+
 	#cover > div > div {
 	  padding: 0px 10px;
 	  max-width: 500px;
 	  margin: 0 auto;
 	}
-	
+
 	button,
 	a.button {
 	font-size: 90%;
 /* 	padding: 10px 60px; */
 	}
-	
+
 	#maps-background {
 		display: none;
 	}
-		
+
 	#neighborhood-guess-wrapper {
 	  float: left;
 	  margin: 0 auto;
 	  padding-left: 0px;
 	  pointer-events: none;
 	}
-	
-	
+
+
 	#map .neighborhood[inactive] {
 	  fill: rgba(248, 159, 52, 0.1);
 	}
-	
+
 	#count-time-wrapper {
 	  float: left;
 	  margin: 0 auto;
 	  padding-left:0px;
 	  pointer-events: none;
 	}
-	
+
 	.difficult-game, .neighborhoods-removed-disclaimer {
 		display: none;
 	}
-	
+
 	button.smaller,
 	a.button.smaller {
 	  font-weight: 400;
@@ -767,11 +767,11 @@ body:not(.neighborhoods-removed) .neighborhoods-removed-disclaimer {
 	  display: block;
 	  margin: 0 10px 15px 10px;
 	}
-	
+
 	.save-to-homescreen {
 		font-size: 80%;
 	}
-	
+
 	#mobilelogo.mobilevisible {
 	    position: absolute;
 		color: white;
@@ -779,7 +779,7 @@ body:not(.neighborhoods-removed) .neighborhoods-removed-disclaimer {
                0 0 5px black;
   z-index: 10000;
   text-align: center;
-	  
+
 	  display: inline-block;
 	  font-weight: normal;
 	  font-size: 45px;
@@ -791,16 +791,16 @@ body:not(.neighborhoods-removed) .neighborhoods-removed-disclaimer {
 	  margin-top: 20px;
 	  text-rendering: optimizeLegibility;
 }
-	
+
 }
 
 /* webapp mode */
 @media all and (display-mode: standalone) {
-  
+
   #neighborhood-guess-wrapper {
 	  padding-top:20px;
 	}
-	
+
 	.save-to-homescreen {
 		display:none;
 	}

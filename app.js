@@ -11,7 +11,7 @@ var startApp = function() {
   app.use(express.compress());
 
   app.use(lessMiddleware({
-    src: __dirname + '/public',
+    src: __dirname + '',
     compress: (process.env.NODE_ENV == 'production'),
     once: (process.env.NODE_ENV == 'production')
   }));
@@ -27,7 +27,7 @@ var startApp = function() {
     }
   });
 
-  app.use(express.static(__dirname + '/public'));
+  app.use(express.static(__dirname + ''));
 
   var port = process.env.PORT || 8000;
   app.listen(port, null, null, function() {
@@ -44,7 +44,7 @@ function normalizeCountryName(str) {
 }
 
 // Write combined metadata file from individual location metadata files
-fsTools.findSorted('public/data', /[^.]+\.metadata.json/, function(err, files) {
+fsTools.findSorted('data', /[^.]+\.metadata.json/, function(err, files) {
 
   var metadata = {};
 
@@ -55,6 +55,7 @@ fsTools.findSorted('public/data', /[^.]+\.metadata.json/, function(err, files) {
   for (var index in files) {
     var metadataFilePath = files[index];
     var locationName = path.basename(metadataFilePath, '.metadata.json');
+
 
     // Exclude template file
     if (locationName != '_TEMPLATE') {
@@ -71,7 +72,7 @@ fsTools.findSorted('public/data', /[^.]+\.metadata.json/, function(err, files) {
       // Combine a list of country names.
       var countryName = metadata[locationName].countryName;
       if (!countryName && !metadata[locationName].stateName) {
-        countryName = 'The World';        
+        countryName = 'The World';
       }
       if (countryName && countryNames.indexOf(countryName) == -1) {
         countryNames.push(countryName);
@@ -81,7 +82,7 @@ fsTools.findSorted('public/data', /[^.]+\.metadata.json/, function(err, files) {
       // Parse GeoJSON file, find the first available latitude/longitude,
       // and add them to the metadata.
 
-      var geoJsonFilePath = 'public/data/' + locationName + '.geojson';
+      var geoJsonFilePath = 'data/' + locationName + '.geojson';
       if (!fs.existsSync(geoJsonFilePath)) {
         console.error('GeoJSON file not found for \'' + locationName +
                       '\'. Aborting server start.');
@@ -106,7 +107,7 @@ fsTools.findSorted('public/data', /[^.]+\.metadata.json/, function(err, files) {
     }
   }
 
-  countryNames.sort(function(a, b) {
+    countryNames.sort(function(a, b) {
     return (normalizeCountryName(a) > normalizeCountryName(b)) ? 1 : -1;
   });
 
@@ -115,7 +116,7 @@ fsTools.findSorted('public/data', /[^.]+\.metadata.json/, function(err, files) {
     'application is restarted.\n//\n\n' +
     'var CITY_DATA = ' + JSON.stringify(metadata) + ';\n' +
     'var COUNTRY_NAMES = ' + JSON.stringify(countryNames) + ';\n';
-  fs.writeFileSync('public/js/data.js', metadataFileContents);
+  fs.writeFileSync('js/data.js', metadataFileContents);
 
   startApp();
 });

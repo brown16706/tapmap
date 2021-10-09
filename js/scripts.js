@@ -1,16 +1,3 @@
-/*
- * Click That ’Hood
- *
- * Front-end written (mostly) by Marcin Wichary, Code for America fellow 
- * in the year 2013.
- *
- * Note: This code is really gnarly. It’s been done under a lot of time 
- * pressure and there’s a lot of shortcut and tech debt. It might be improved
- * later if there’s time later.
- *
- * Note 2: Code made even worse by David Bauer, who is more of a journalist than a coder. ¯\_(ツ)_/¯
- */
-
 var COUNTRY_NAME_USA = 'U.S.';
 
 var EASY_MODE_COUNT = 20;
@@ -34,14 +21,11 @@ var MAP_BACKGROUND_MAX_ZOOM_NON_US = 12;
 
 var MAPBOX_MAP_ID = 'codeforamerica.map-mx0iqvk2';
 
-var ADD_YOUR_CITY_URL = 
-    'https://github.com/codeforamerica/click_that_hood/wiki/How-to-add-a-city-to-Click-That-%E2%80%99Hood';
+// var ADD_YOUR_CITY_URL =
+//     'https://github.com/codeforamerica/click_that_hood/wiki/How-to-add-a-city-to-Click-That-%E2%80%99Hood';
 
 var MAPS_DEFAULT_SCALE = 512;
 var D3_DEFAULT_SCALE = 500;
-
-var FACEBOOK_APP_ID = '777235462302407';
-var FB_PICTURE = 'http://youdontknowafrica.com/public/images/teaser.png';
 
 var startTime = 0;
 var timerIntervalId;
@@ -92,12 +76,12 @@ var geoDataLoaded = false;
 var finalTime = null;
 var timerStopped = false;
 
-function lonToTile(lon, zoom) { 
+function lonToTile(lon, zoom) {
   return Math.floor((lon + 180) / 360 * Math.pow(2, zoom));
 }
 
-function latToTile(lat, zoom) { 
-  return Math.floor((1 - Math.log(Math.tan(lat * Math.PI / 180) + 
+function latToTile(lat, zoom) {
+  return Math.floor((1 - Math.log(Math.tan(lat * Math.PI / 180) +
       1 / Math.cos(lat * Math.PI / 180)) / Math.PI) / 2 * Math.pow(2, zoom));
 }
 
@@ -117,18 +101,18 @@ function updateCanvasSize() {
   if (screen.width > 768) {
 	  mapWidth = canvasWidth - HEADER_WIDTH - BODY_MARGIN * 2;
   }
-  
+
   else {
 	  mapWidth = canvasWidth - BODY_MARGIN * 2;
   }
- 
+
 	mapHeight = canvasHeight - MAP_VERT_PADDING * 2;
-	
+
 	// TODO hack
 	if (mapHeight < 0) {
 	  mapHeight = 0;
 	}
-  
+
 }
 
 function calculateMapSize() {
@@ -159,7 +143,7 @@ function calculateMapSize() {
       for (var z in geoData.features[i].geometry.coordinates) {
         for (var j in geoData.features[i].geometry.coordinates[z]) {
 
-          if (geoData.features[i].geometry.coordinates[z][j].length && 
+          if (geoData.features[i].geometry.coordinates[z][j].length &&
               typeof geoData.features[i].geometry.coordinates[z][j][0] != 'number') {
             for (var k in geoData.features[i].geometry.coordinates[z][j]) {
               var lon = geoData.features[i].geometry.coordinates[z][j][k][0];
@@ -191,20 +175,20 @@ function calculateMapSize() {
 
     // Calculate for height first
     // TODO: not entirely sure where these magic numbers are coming from
-    globalScale = 
-        ((D3_DEFAULT_SCALE * 180) / latSpread * (mapHeight - 50)) / 
+    globalScale =
+        ((D3_DEFAULT_SCALE * 180) / latSpread * (mapHeight - 50)) /
             MAPS_DEFAULT_SCALE / 0.045 * (-latStep);
 
     // Adjust map zoom of necessary
     globalScale = 1 * globalScale;
-    
+
 
     // Calculate width according to that scale
-    var width = globalScale / (D3_DEFAULT_SCALE * 360) * 
+    var width = globalScale / (D3_DEFAULT_SCALE * 360) *
         lonSpread * MAPS_DEFAULT_SCALE;
 
     if (width > mapWidth) {
-      globalScale = ((D3_DEFAULT_SCALE * 360) / lonSpread * mapWidth) / 
+      globalScale = ((D3_DEFAULT_SCALE * 360) / lonSpread * mapWidth) /
           MAPS_DEFAULT_SCALE;
     }
 
@@ -219,11 +203,11 @@ function createSvg() {
 
   mapSvg = d3.select('#svg-container').append('svg')
       .attr('width', mapWidth)
-      .attr('height', mapHeight);  
+      .attr('height', mapHeight);
 }
 
 function loadGeoData() {
-  var url = 'public/data/africa.geojson';
+  var url = 'data/africa.geojson';
   queue().defer(d3.json, url).await(onGeoDataLoad);
 }
 
@@ -235,15 +219,15 @@ function removeSmallNeighborhoods() {
   for (var i = 0, el; el = els[i]; i++) {
     var boundingBox = el.getBBox();
 
-    if ((boundingBox.width < smallNeighborhoodThreshold) || 
+    if ((boundingBox.width < smallNeighborhoodThreshold) ||
         (boundingBox.height < smallNeighborhoodThreshold)) {
-      
+
       var name = el.getAttribute('name');
 
       neighborhoods.splice(neighborhoods.indexOf(name), 1);
 
       makeNeighborhoodInactive(name);
-      
+
       smallNeighborhoodsRemoved.push(name)
 
       totalNeighborhoodsCount--;
@@ -255,7 +239,7 @@ function removeSmallNeighborhoods() {
   if (someSmallNeighborhoodsRemoved) {
     document.body.classList.add('neighborhoods-removed');
     updateSmallNeighborhoodDisplay();
-  } else {    
+  } else {
     document.body.classList.remove('neighborhoods-removed');
   }
 }
@@ -309,7 +293,7 @@ function findNeighborhoodByPoint(x, y) {
     if (className && className.indexOf('neighborhood') != -1) {
       return el;
     }
-  } 
+  }
 
   return false;
 }
@@ -425,7 +409,7 @@ function setTouchActive(newTouchActive) {
   if (touchActive) {
     document.body.classList.add('touch-active');
   } else {
-    document.body.classList.remove('touch-active');    
+    document.body.classList.remove('touch-active');
   }
 
   var els = document.querySelectorAll('.click-verb');
@@ -441,9 +425,9 @@ function hoverNeighborhoodEl(el, showTooltip) {
 
   var name = el.getAttribute('name');
 
-  if (showTooltip && ((hoverEl.innerHTML != name) || 
+  if (showTooltip && ((hoverEl.innerHTML != name) ||
       (!hoverEl.classList.contains('visible')))) {
-    hoverEl.classList.remove('visible');  
+    hoverEl.classList.remove('visible');
 
     hoverEl.innerHTML = name;
 
@@ -455,7 +439,7 @@ function hoverNeighborhoodEl(el, showTooltip) {
 
     var left = (boundingBox.x + boundingBox.width / 2 - hoverEl.offsetWidth / 2);
 
-    hoverEl.style.top = top + 'px'; 
+    hoverEl.style.top = top + 'px';
     hoverEl.style.left = left + 'px';
 
     if (el.getAttribute('inactive')) {
@@ -464,7 +448,7 @@ function hoverNeighborhoodEl(el, showTooltip) {
       hoverEl.classList.remove('inactive');
     }
 
-    hoverEl.classList.add('visible');  
+    hoverEl.classList.add('visible');
   }
 
   // Fix for Safari 6
@@ -492,7 +476,7 @@ function hideSafariNeighborhood() {
       el.style.fill = 'rgba(0, 255, 0, .25)';
       el.style.stroke = 'transparent';
     } else {
-      el.style.fill = '';      
+      el.style.fill = '';
     }
   }
 }
@@ -541,7 +525,7 @@ function setMapClickable(newMapClickable) {
   if (mapClickable) {
     document.body.classList.remove('no-hover');
   } else {
-    document.body.classList.add('no-hover');    
+    document.body.classList.add('no-hover');
   }
 }
 
@@ -566,7 +550,7 @@ function onNeighborhoodClick(el) {
     return;
   }
 
-  if (el.getAttribute('inactive')) {      
+  if (el.getAttribute('inactive')) {
     return;
   }
 
@@ -636,8 +620,8 @@ function onNeighborhoodClick(el) {
 }
 
 function updateGameProgress() {
-  document.querySelector('#count').innerHTML = 
-      neighborhoodsGuessed.length + ' of ' + 
+  document.querySelector('#count').innerHTML =
+      neighborhoodsGuessed.length + ' of ' +
       (neighborhoodsGuessed.length + neighborhoodsToBeGuessed.length);
 
   document.querySelector('#count-time-wrapper-wrapper').classList.add('visible');
@@ -664,7 +648,7 @@ function removeNeighborhoodHighlights() {
       el.style.fill = 'rgba(0, 255, 0, .25)';
       el.style.stroke = 'transparent';
     } else {
-      el.style.fill = '';      
+      el.style.fill = '';
       el.style.stroke = 'white';
     }
   }
@@ -679,13 +663,13 @@ function removeNeighborhoodHighlights() {
 
 function updateNeighborhoodDisplay() {
   if (neighborhoodToBeGuessedNext) {
-    document.querySelector('#neighborhood-guess').classList.add('visible');  
+    document.querySelector('#neighborhood-guess').classList.add('visible');
   } else {
-    document.querySelector('#neighborhood-guess').classList.remove('visible');      
+    document.querySelector('#neighborhood-guess').classList.remove('visible');
   }
 
-  document.querySelector('#neighborhood-guess .name').innerHTML = 
-    neighborhoodToBeGuessedNext;  
+  document.querySelector('#neighborhood-guess .name').innerHTML =
+    neighborhoodToBeGuessedNext;
 }
 
 function nextGuess() {
@@ -710,7 +694,7 @@ function makeAllNeighborhoodsActive() {
 
   for (var i = 0, el; el = els[i]; i++) {
     el.removeAttribute('inactive');
-  } 
+  }
 }
 
 function makeNeighborhoodInactive(name) {
@@ -739,7 +723,7 @@ function reloadPage() {
 function retrieveData() { // get data from the database
 
 	myDataRef.on("value", function(snapshot) {
-	  
+
 	  data = snapshot.val();
 	  numberOfPlays = data['plays'];
 	  fillNumberOfPlays();
@@ -750,9 +734,9 @@ function retrieveData() { // get data from the database
 	}, function (errorObject) {
 	  console.log("The read failed: " + errorObject.code);
 	});
-	
+
 };
- 
+
 function fillNumberOfPlays() {
 
 var els = document.querySelectorAll('span.number-of-plays');
@@ -761,7 +745,7 @@ var els = document.querySelectorAll('span.number-of-plays');
 if (typeof numberOfPlays === 'number' && numberOfPlays > 1451400 && numberOfPlays < 2000000 ) {
   for (var i = 0, el; el = els[i]; i++) {
   el.innerHTML = numberOfPlays.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "&thinsp;");;
-  };	
+  };
 }
 
 else {
@@ -777,15 +761,15 @@ else {
 function updatePlaysCount() {
  	myDataRef.set({plays: numberOfPlays+1});
 }
- 
+
 
 function startGame(useEasyMode) {
   gameStarted = true;
-  
+
   updatePlaysCount();
-  
+
   document.querySelector('#intro').classList.remove('visible');
-  document.querySelector('#mobilelogo').classList.remove('mobilevisible');  
+  document.querySelector('#mobilelogo').classList.remove('mobilevisible');
   document.querySelector('#cover').classList.remove('visible');
 
   neighborhoodsToBeGuessed = [];
@@ -802,7 +786,7 @@ function startGame(useEasyMode) {
 
   startTime = new Date().getTime();
   updateTimer();
-  
+
   window.setTimeout(function() {
     startTime = new Date().getTime();
     timerIntervalId = window.setInterval(updateTimer, 100);
@@ -818,7 +802,7 @@ function createTimeout(fn, data, delay) {
 function stopTimer() {
   timerStopped = true;
   finalTime = new Date().getTime();
-  window.clearInterval(timerIntervalId);  
+  window.clearInterval(timerIntervalId);
 
   updateTimer();
 }
@@ -833,7 +817,7 @@ function gameOver() {
   var timer = 300;
   var timerDelta = 100;
   var timerDeltaDiff = 5;
-  var TIMER_DELTA_MIN = 10; 
+  var TIMER_DELTA_MIN = 10;
 
   for (var i = 0, el; el = els[i]; i++) {
     createTimeout(function(el) { animateNeighborhoodGuess(el); }, el, timer);
@@ -851,10 +835,10 @@ function gameOver() {
 
 function getSharingMessage() {
   if (easyMode) {
-  return 'I just played #YouDontKnowAfrica and identified ' + 
+  return 'I just played #YouDontKnowAfrica and identified ' +
       neighborhoodsGuessed.length + ' African countries in ' + getTimer() + '. Can you do better?';
       }
-  else {return 'I just played #YouDontKnowAfrica in hard mode and identified ' + 
+  else {return 'I just played #YouDontKnowAfrica in hard mode and identified ' +
       neighborhoodsGuessed.length + ' African countries in ' + getTimer() + '. Can you do better?';}
 }
 
@@ -866,9 +850,9 @@ function updateFacebookLink(congratsEl) {
 
   el.href = 'https://www.facebook.com/dialog/feed?' +
       'app_id=' + FACEBOOK_APP_ID +
-      '&redirect_uri=' + encodeURIComponent(url) + 
+      '&redirect_uri=' + encodeURIComponent(url) +
       '&display=page' +
-      '&link=' + encodeURIComponent(url) + 
+      '&link=' + encodeURIComponent(url) +
       '&name=' + encodeURIComponent('[PLAY NOW] You Don\'t Know Africa') +
       '&description=' + encodeURIComponent(text) +
       '&picture=' + FB_PICTURE;
@@ -881,11 +865,11 @@ function updateTwitterLink(congratsEl) {
   var url = location.href;
 
   if (easyMode) {
-  	el.href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(text) + 
+  	el.href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(text) +
       '&url=' + encodeURIComponent(url) + '&via=davidbauer';
       }
   else {
-	  el.href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(text) + 
+	  el.href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(text) +
       '&url=' + encodeURIComponent(url);
   }
 }
@@ -905,7 +889,7 @@ function updateEmailLink(congratsEl) {
   var text = getSharingMessage();
   var url = location.href;
 
-  el.href = 'mailto:?subject=You will like this game: You Don\'t Know Africa&body=' + text + 
+  el.href = 'mailto:?subject=You will like this game: You Don\'t Know Africa&body=' + text +
       ' ' + url;
 }
 
@@ -921,7 +905,7 @@ function gameOverPart2() {
   updateEmailLink(el);
 
   document.querySelector('#cover').classList.add('visible');
-  el.classList.add('visible');  
+  el.classList.add('visible');
 }
 
 function getTimer() {
@@ -951,7 +935,7 @@ function updateTimer() {
   var els = document.querySelectorAll('.time');
   for (var i = 0, el; el = els[i]; i++) {
     el.innerHTML = timeHtml;
-  } 
+  }
 }
 
 /*
@@ -970,7 +954,7 @@ function prepareMapBackground() {
   while (size < MAP_BACKGROUND_SIZE_THRESHOLD) {
     size *= 2;
     zoom--;
-  } 
+  }
   // TODO resize properly instead of recreating every single time
   document.querySelector('#maps-background').innerHTML = '';
 
@@ -981,21 +965,21 @@ function prepareMapBackground() {
     zoom++;
   }
 
-  
+
   var maxZoomLevel = MAP_BACKGROUND_MAX_ZOOM_NON_US;
-  
+
   while (zoom > maxZoomLevel) {
     zoom--;
     size *= 2;
   }
 
-  map.tileSize = { x: Math.round(size / pixelRatio), 
+  map.tileSize = { x: Math.round(size / pixelRatio),
                    y: Math.round(size / pixelRatio) };
 
   var tile = latToTile(centerLat, zoom);
-  var longStep = 
+  var longStep =
       (tileToLon(1, zoom) - tileToLon(0, zoom)) / 256 * 128;
-  var latStep = 
+  var latStep =
       (tileToLat(tile + 1, zoom) - tileToLat(tile, zoom)) / 256 * 128;
 
   var lat = centerLat;
@@ -1006,7 +990,7 @@ function prepareMapBackground() {
   var ratio = leftMargin / map.tileSize.x;
 
   lon -= ratio * longStep;
-  
+
   map.centerzoom({ lat: lat, lon: lon }, zoom);
 }
 */
@@ -1015,9 +999,9 @@ function onResize() {
 
   var height = window.innerHeight;
 
-  document.querySelector('body > .canvas').style.height = 
+  document.querySelector('body > .canvas').style.height =
     (height - document.querySelector('body > .canvas').offsetTop) + 'px';
-    
+
   if (geoDataLoaded) {
       calculateMapSize();
 /*       prepareMapBackground(); */
@@ -1033,14 +1017,14 @@ function onResize() {
         updateCount();
       }
   }
-  
+
 }
 /*
 
 function getNeighborhoodNoun(plural) {
   if (!plural) {
     return (CITY_DATA[cityId].neighborhoodNoun && CITY_DATA[cityId].neighborhoodNoun[0]) || DEFAULT_NEIGHBORHOOD_NOUN_SINGULAR;
-  } else { 
+  } else {
     return (CITY_DATA[cityId].neighborhoodNoun && CITY_DATA[cityId].neighborhoodNoun[1]) || DEFAULT_NEIGHBORHOOD_NOUN_PLURAL;
   }
 }
@@ -1065,7 +1049,7 @@ function prepareLocationList() {
     for (var id in ids) {
       var cityData = CITY_DATA[ids[id]];
 
-      if ((cityData.countryName != COUNTRY_NAMES[i]) && 
+      if ((cityData.countryName != COUNTRY_NAMES[i]) &&
           (!cityData.stateName || (COUNTRY_NAMES[i] != COUNTRY_NAME_USA)) &&
           (cityData.stateName || cityData.countryName || (COUNTRY_NAMES[i] != 'The World'))) {
         continue;
@@ -1077,12 +1061,12 @@ function prepareLocationList() {
 
       if (!cityData.stateName && !cityData.countryName && ids[id] != "africa") {
         var url = 'http://www.click-that-hood.com/?location=' + ids[id];
-      }       
+      }
       else if (ids[id] == "africa") {
-	    var url = '?location=' + ids[id];  
+	    var url = '?location=' + ids[id];
       }
       else {
-        var url = 'http://www.click-that-hood.com/?city=' + ids[id];        
+        var url = 'http://www.click-that-hood.com/?city=' + ids[id];
       }
 
       var html = '<a href="' + url + '" target="_blank">';
@@ -1103,7 +1087,7 @@ function prepareLocationList() {
   document.querySelector('.menu .locations').appendChild(el);
 
   var el = document.createElement('li');
-  el.innerHTML = '<a target="_blank" class="add-your-city" href="' + 
+  el.innerHTML = '<a target="_blank" class="add-your-city" href="' +
       ADD_YOUR_CITY_URL + '">Add your city…</a>';
   document.querySelector('.menu .locations').appendChild(el);
 
@@ -1122,7 +1106,7 @@ function getEnvironmentInfo() {
   } else {
     smallNeighborhoodThreshold = SMALL_NEIGHBORHOOD_THRESHOLD_MOUSE;
   }
-  
+
 }
 
 function checkIfEverythingLoaded() {
@@ -1146,13 +1130,13 @@ function deg2rad(deg) {
 function geoDist(lat1, lon1, lat2, lon2) {
   var R = 6371; // Radius of the earth in km
   var dLat = deg2rad(lat2 - lat1);
-  var dLon = deg2rad(lon2 - lon1); 
-  var a = 
+  var dLon = deg2rad(lon2 - lon1);
+  var a =
     Math.sin(dLat/2) * Math.sin(dLat/2) +
-    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
+    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
     Math.sin(dLon/2) * Math.sin(dLon/2)
-    ; 
-  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+    ;
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
   var d = R * c; // Distance in km
   return d;
 }
@@ -1206,15 +1190,15 @@ function testBrowser() {
 }
 
 function main() {
-	
+
   if (testBrowser()) {
-    
+
     window.addEventListener('load', onBodyLoad, false);
     window.addEventListener('resize', onResize, false);
 
     getEnvironmentInfo();
     cityId = "africa";
-    
+
     retrieveData();
 
     onResize();
@@ -1225,10 +1209,10 @@ function main() {
 
 	loadGeoData();
     createSvg();
-    
+
     document.querySelector('#more-cities-wrapper div').
         addEventListener('click', onMoreCitiesClick, false);
-    
+
     prepareLocationList();
 
     onResize();
